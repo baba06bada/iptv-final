@@ -189,11 +189,9 @@
         /* PLAYER VIEW - always in DOM, hidden via opacity/visibility not display:none */
         #view-player {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: flex; flex-direction: column; background: #000;
-            z-index: 0; visibility: hidden; opacity: 0;
-            -webkit-transition: opacity 0.3s, visibility 0.3s; transition: opacity 0.3s, visibility 0.3s;
+            display: none; flex-direction: column; background: #000; z-index: 10;
         }
-        #view-player.active { z-index: 10; visibility: visible; opacity: 1; }
+        #view-player.active { display: flex; }
         #view-player video { width: 100%; height: 100%; -webkit-object-fit: contain; object-fit: contain; background: #000; }
         #playerBox { flex: 1; position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         #playerBox video { width: 100%; height: 100%; object-fit: contain; }
@@ -1392,9 +1390,11 @@
             var streamUrl = '';
             if (currentMode === 'LIVE') {
                 streamUrl = activePanel.url + '/live/' + activePanel.user + '/' + activePanel.pass + '/' + (ch.stream_id || ch.id) + '.m3u8';
+                document.getElementById('progressContainer').style.display = 'none';
             } else if (currentMode === 'VOD') {
-                var ext = ch.container_extension || 'mp4';
+                var ext = ch.container_extension ? ch.container_extension : 'mp4';
                 streamUrl = activePanel.url + '/movie/' + activePanel.user + '/' + activePanel.pass + '/' + ch.stream_id + '.' + ext;
+                document.getElementById('progressContainer').style.display = 'block';
             }
             if (!streamUrl) { showNotif('⚠️ Oynatılamaz içerik'); return; }
             currentPlaying = ch;
@@ -1437,17 +1437,26 @@
             var checkInterval = isLive ? 3000 : 10000;
             var maxStalls = isLive ? 2 : 4;
             stallCheckInterval = setInterval(function() {
-                if (!player.paused && player.readyState > 0) {
-                    var cp = player.currentTime;
-                    if (cp === lastPlayheadPosition) {
+                if (!player.paused) {
+                    if (player.readyState > 0) {
+                        var cp = player.currentTime;
+                        if (cp === lastPlayheadPosition) {
+                            player._stallCount = (player._stallCount || 0) + 1;
+                            if (player._stallCount >= maxStalls) {
+                                clearInterval(stallCheckInterval);
+                                if (isLive && reconnectAttempts < PLAYER_RECONNECT_MAX) triggerReconnect();
+                                else if (!isLive) showNotif('⏳ Yükleniyor...');
+                            }
+                        } else { player._stallCount = 0; }
+                        lastPlayheadPosition = cp;
+                    } else {
                         player._stallCount = (player._stallCount || 0) + 1;
                         if (player._stallCount >= maxStalls) {
                             clearInterval(stallCheckInterval);
                             if (isLive && reconnectAttempts < PLAYER_RECONNECT_MAX) triggerReconnect();
-                            else showNotif('⏳ Yükleniyor...');
+                            else if (!isLive) showNotif('⏳ Yükleniyor...');
                         }
-                    } else { player._stallCount = 0; }
-                    lastPlayheadPosition = cp;
+                    }
                 }
             }, checkInterval);
 
@@ -1465,7 +1474,7 @@
             lastPlayheadPosition = -1;
             player._stallCount = 0;
 
-            var ext = ep.container_extension || 'mp4';
+            var ext = ep.container_extension ? ep.container_extension : 'mp4';
             var epId = ep.id || ep.stream_id;
             var streamUrl = activePanel.url + '/series/' + activePanel.user + '/' + activePanel.pass + '/' + epId + '.' + ext;
             currentPlaying = ep;
@@ -1511,6 +1520,7 @@
 
         player.addEventListener('error', function() {
             if (currentPlaying && currentMode === 'LIVE') triggerReconnect();
+            else if (currentPlaying) showNotif('⚠️ Oynatma hatası');
         });
         player.addEventListener('stalled', function() {
             if (currentPlaying && currentMode === 'LIVE') triggerReconnect();
