@@ -189,9 +189,10 @@
         /* PLAYER VIEW - always in DOM, hidden via opacity/visibility not display:none */
         #view-player {
             position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            display: none; flex-direction: column; background: #000; z-index: 10;
+            display: flex; flex-direction: column; background: #000; z-index: 10;
+            visibility: hidden; opacity: 0; pointer-events: none;
         }
-        #view-player.active { display: flex; }
+        #view-player.active { visibility: visible; opacity: 1; pointer-events: auto; }
         #view-player video { width: 100%; height: 100%; -webkit-object-fit: contain; object-fit: contain; background: #000; }
         #playerBox { flex: 1; position: relative; background: #000; display: flex; align-items: center; justify-content: center; overflow: hidden; }
         #playerBox video { width: 100%; height: 100%; object-fit: contain; }
@@ -1422,27 +1423,22 @@
                 hlsInstance.on(Hls.Events.MANIFEST_PARSED, function() { try { player.play(); if (currentSpeed !== 1.0) player.playbackRate = currentSpeed; checkResume(ch); startResumeTracking(ch); } catch(e) {} });
                 hlsInstance.on(Hls.Events.ERROR, function(evt, data) {
                     if (data.fatal) {
-                        if (isLive && reconnectAttempts < PLAYER_RECONNECT_MAX) {
-                            if (hlsInstance) hlsInstance.recoverMediaError();
-                        } else if (!isLive) {
-                            if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
-                            player.src = streamUrl; try { player.play(); if (currentSpeed !== 1.0) player.playbackRate = currentSpeed; } catch(e) {}
-                        }
+                        if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
+                        if (isLive && reconnectAttempts < PLAYER_RECONNECT_MAX) triggerReconnect();
+                        else if (!isLive) { player.src = streamUrl; try { player.play(); if (currentSpeed !== 1.0) player.playbackRate = currentSpeed; } catch(e) {} }
                     }
                 });
             } else {
                 player.src = streamUrl; try { player.play(); checkResume(ch); startResumeTracking(ch); } catch(e) {}
             }
 
-            var checkInterval = isLive ? 1500 : 10000;
-            var maxStalls = isLive ? 3 : 4;
             stallCheckInterval = setInterval(function() {
                 if (!player.paused) {
                     if (player.readyState > 0) {
                         var cp = player.currentTime;
                         if (cp === lastPlayheadPosition) {
                             player._stallCount = (player._stallCount || 0) + 1;
-                            if (player._stallCount >= maxStalls) {
+                            if (player._stallCount >= 2) {
                                 clearInterval(stallCheckInterval);
                                 if (isLive && reconnectAttempts < PLAYER_RECONNECT_MAX) triggerReconnect();
                                 else if (!isLive) showNotif('⏳ Yükleniyor...');
@@ -1451,40 +1447,14 @@
                         lastPlayheadPosition = cp;
                     } else {
                         player._stallCount = (player._stallCount || 0) + 1;
-                        if (player._stallCount >= maxStalls) {
+                        if (player._stallCount >= 2) {
                             clearInterval(stallCheckInterval);
                             if (isLive && reconnectAttempts < PLAYER_RECONNECT_MAX) triggerReconnect();
                             else if (!isLive) showNotif('⏳ Yükleniyor...');
                         }
                     }
                 }
-            }, checkInterval);
-
-            if (isLive) {
-                var hbFailCount = 0;
-                var heartbeatInterval = setInterval(function() {
-                    if (!currentPlaying || currentMode !== 'LIVE') {
-                        clearInterval(heartbeatInterval);
-                        return;
-                    }
-                    var bad = false;
-                    if (player.paused) bad = true;
-                    else if (player.readyState === 0) bad = true;
-                    else if (player.networkState === 3) bad = true;
-                    else if (player.currentTime === lastPlayheadPosition) bad = true;
-                    else if (player.buffered.length === 0) bad = true;
-                    if (bad) {
-                        hbFailCount++;
-                        if (hbFailCount >= 2 && reconnectAttempts < PLAYER_RECONNECT_MAX) {
-                            clearInterval(heartbeatInterval);
-                            clearInterval(stallCheckInterval);
-                            triggerReconnect();
-                        }
-                    } else {
-                        hbFailCount = 0;
-                    }
-                }, 1000);
-            }
+            }, isLive ? 3000 : 10000);
 
             showNotif('▶ ' + ch.name);
             triggerOsd();
@@ -1557,7 +1527,6 @@
             document.getElementById('view-channels').style.display = 'none';
             document.getElementById('catsColumn').style.display = 'none';
             document.getElementById('view-player').classList.add('active');
-            document.getElementById('progressContainer').style.display = 'block';
             triggerOsd();
         }
 
