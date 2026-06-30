@@ -1511,7 +1511,7 @@
             reconnectAttempts++;
             if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
             showNotif('⚠️ Akış yenileniyor (' + reconnectAttempts + '/' + PLAYER_RECONNECT_MAX + ')...');
-            reconnectTimer = setTimeout(function() { if (currentPlaying) playMedia(currentPlaying); }, 2000);
+            reconnectTimer = setTimeout(function() { if (currentPlaying) playMedia(currentPlaying); }, 500);
         }
 
         player.addEventListener('error', function() {
@@ -1519,7 +1519,12 @@
             else if (currentPlaying) showNotif('⚠️ Oynatma hatası');
         });
         player.addEventListener('stalled', function() {
-            if (currentPlaying && currentMode === 'LIVE') triggerReconnect();
+            if (currentPlaying && currentMode === 'LIVE') {
+                try { player.play(); } catch(e) {}
+                setTimeout(function() {
+                    if (currentPlaying && currentMode === 'LIVE' && player.paused) triggerReconnect();
+                }, 1500);
+            }
         });
 
         function showPlayerView() {
@@ -1590,10 +1595,13 @@
         function exitPlayer() {
             if (hlsInstance) { hlsInstance.destroy(); hlsInstance = null; }
             player.pause();
+            player.removeAttribute('src');
+            player.load();
             stopResumeTracking();
             stopAutoNext();
             if (reconnectTimer) { clearTimeout(reconnectTimer); reconnectTimer = null; }
             clearInterval(stallCheckInterval);
+            currentPlaying = null;
             document.body.classList.remove('fullscreen-mode');
             document.getElementById('view-player').classList.remove('active');
             if (currentContent === 'dashboard') showDashboard();
