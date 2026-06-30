@@ -211,7 +211,7 @@
         .player-osd.active { opacity: 1; pointer-events: auto; }
 
         .osd-top { position: absolute; top: 20px; left: 20px; right: 20px; }
-        .osd-top-left { position: absolute; left: 0; top: 0; }
+        .osd-top-left { position: absolute; left: 0; top: 0; padding-left: 130px; }
         .osd-top-right { position: absolute; right: 0; top: 0; }
         .osd-title { font-size: 36px; font-weight: 800; color: #fff; text-shadow: 0 2px 8px rgba(0,0,0,0.9); }
         .osd-sub { font-size: 22px; color: #ff9800; font-weight: 600; text-shadow: 0 1px 4px rgba(0,0,0,0.8); margin-top: 4px; }
@@ -364,11 +364,11 @@
         </div>
         <div class="login-right">
             <h2>XTREAM CODES API</h2>
-            <div class="login-field"><input type="text" id="li-name" class="lf focused" placeholder="Any Name"></div>
-            <div class="login-field"><input type="text" id="li-user" class="lf" placeholder="Username"></div>
-            <div class="login-field"><input type="password" id="li-pass" class="lf" placeholder="Password"></div>
-            <div class="login-field"><input type="text" id="li-url" class="lf" placeholder="http://url_here.com:port"></div>
-            <div id="li-btn" class="login-btn" onclick="doLogin()">ADD USER</div>
+            <div class="login-field"><input type="text" id="li-name" class="lf focused" placeholder="Panel Adı"></div>
+            <div class="login-field"><input type="text" id="li-user" class="lf" placeholder="Kullanıcı Adı"></div>
+            <div class="login-field"><input type="password" id="li-pass" class="lf" placeholder="Şifre"></div>
+            <div class="login-field"><input type="text" id="li-url" class="lf" placeholder="http://site_url:port"></div>
+            <div id="li-btn" class="login-btn" onclick="doLogin()">PANEL EKLE</div>
         </div>
     </div>
 
@@ -418,15 +418,15 @@
                         <div class="dash-row-top">
                             <div class="dash-card card-live focused" id="dash-live" onclick="switchCategory('LIVE')">
                                 <svg class="dicon" viewBox="0 0 24 24"><path d="M21 3H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h5v2h8v-2h5c1.1 0 1.99-.9 1.99-2L23 5c0-1.1-.9-2-2-2zm0 14H3V5h18v12zm-5-6l-7 4V7z"/></svg>
-                                <div class="dlabel">LIVE TV</div>
+                                <div class="dlabel">CANLI TV</div>
                             </div>
                             <div class="dash-card card-movies" id="dash-movies" onclick="switchCategory('VOD')">
                                 <svg class="dicon" viewBox="0 0 24 24"><path d="M18 4l2 4h-3l-2-4h-2l2 4h-3l-2-4H8l2 4H7L5 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4h-4z"/></svg>
-                                <div class="dlabel">MOVIES</div>
+                                <div class="dlabel">FİLMLER</div>
                             </div>
                             <div class="dash-card card-series" id="dash-series" onclick="switchCategory('SERIES')">
                                 <svg class="dicon" viewBox="0 0 24 24"><path d="M21 6h-7.59l3.29-3.29L16 1.41 11.59 6H3c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 14H3V8h18v12zM6 10h12v2H6zm0 4h8v2H6z"/></svg>
-                                <div class="dlabel">SERIES</div>
+                                <div class="dlabel">DİZİLER</div>
                             </div>
                         </div>
                         <div class="dash-row-bottom">
@@ -436,11 +436,11 @@
                             </div>
                             <div class="dash-card card-catchup dash-sm" id="dash-catchup" onclick="showNotif('⏪ Catch-up yakında')">
                                 <svg class="dicon" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
-                                <div class="dlabel">CATCH UP</div>
+                                <div class="dlabel">GERİ AL</div>
                             </div>
                             <div class="dash-card card-settings dash-sm" id="dash-settings" onclick="showSettings()">
                                 <svg class="dicon" viewBox="0 0 24 24"><path d="M19.43 12.98c.04-.32.07-.64.07-.98s-.03-.66-.07-.98l2.11-1.65c.19-.15.24-.42.12-.64l-2-3.46c-.12-.22-.39-.3-.61-.22l-2.49 1c-.52-.4-1.08-.73-1.69-.98l-.38-2.65C14.46 2.18 14.25 2 14 2h-4c-.25 0-.46.18-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1c-.23-.09-.49 0-.61.22l-2 3.46c-.13.22-.07.49.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65c-.19.15-.24.42-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l-.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46c.12-.22.07-.49-.12-.64l-2.11-1.65zM12 15.5c-1.93 0-3.5-1.57-3.5-3.5s1.57-3.5 3.5-3.5 3.5 1.57 3.5 3.5-1.57 3.5-3.5 3.5z"/></svg>
-                                <div class="dlabel">SETTINGS</div>
+                                <div class="dlabel">AYARLAR</div>
                             </div>
                         </div>
                         <div class="dash-row-extras" style="display:flex;gap:20px;margin-top:20px;height:180px;">
@@ -456,17 +456,17 @@
                     <div class="back-btn" onclick="showDashboard()" style="position:absolute;top:12px;left:12px;z-index:50;padding:10px 18px;font-size:18px;">
                         <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> Geri
                     </div>
-                    <div class="search-bar" id="searchBar" style="display:none; padding:12px 14px; border-bottom:1px solid rgba(255,255,255,0.05);">
+                    <div class="search-bar" id="searchBar" style="display:none; padding:12px 14px 12px 130px; border-bottom:1px solid rgba(255,255,255,0.05);">
                         <input type="text" id="searchInput" placeholder="🔍 Kanal, film veya dizi ara..." style="width:100%; padding:16px 20px; background:rgba(255,255,255,0.06); border:2px solid rgba(255,255,255,0.1); border-radius:8px; color:#fff; font-size:20px; outline:none;">
                     </div>
-                        <div style="display:flex;gap:6px;padding:6px 14px;border-bottom:1px solid rgba(255,255,255,0.05);flex-shrink:0;" id="sortBar" class="hidden">
+                        <div style="display:flex;gap:6px;padding:6px 14px 6px 130px;border-bottom:1px solid rgba(255,255,255,0.05);flex-shrink:0;" id="sortBar" class="hidden">
                             <span style="color:#888;font-size:16px;line-height:32px;">Sırala:</span>
                             <span class="sort-btn" data-sort="default" onclick="setSort('default')">Varsayılan</span>
                             <span class="sort-btn" data-sort="name" onclick="setSort('name')">A-Z</span>
                             <span class="sort-btn" data-sort="year" onclick="setSort('year')">Yıl</span>
                             <span class="sort-btn" data-sort="rating" onclick="setSort('rating')">Puan</span>
                         </div>
-                        <div class="content-list" id="channelsList" style="padding-top:64px;"></div>
+                        <div class="content-list" id="channelsList" style="padding:64px 0 0 130px;"></div>
                     <div class="vod-grid" id="vodGrid" style="display:none;"></div>
                 </div>
             </div>
@@ -550,7 +550,7 @@
                 <h3>Hakkında</h3>
                 <div class="about-text">
                     <strong>BABA ÖZKAN PLAYER</strong> v1.0<br>
-                    Xtream Codes IPTV Player<br>
+                    Xtream Codes IPTV Oynatıcı<br>
                     WebOS 2.2.3 + Chrome 34 uyumlu
                 </div>
             </div>
@@ -575,7 +575,7 @@
                 </div>
             </div>
             <div class="settings-section">
-                <h3>Dashboard</h3>
+                <h3>Kontrol Paneli</h3>
                 <div id="dashToggleList"></div>
             </div>
             <div class="settings-section">
@@ -676,6 +676,7 @@
         var currentMode = 'LIVE';
         var categoriesData = { LIVE: [], VOD: [], SERIES: [] };
         var streamsCache = {};
+        var fullStreamsCache = {};
         var masterStreamsData = [];
         var filteredStreams = [];
         var selectedCatId = null;
@@ -734,18 +735,19 @@
         var channelsIndex = 0;
         var navFocusColumn = 'content'; /* 'sidebar', 'categories', 'content' */
 
+        try { if (localStorage.getItem('bop_panels')) savedPanels = JSON.parse(localStorage.getItem('bop_panels')); } catch(e) { savedPanels = {}; }
+        try { if (localStorage.getItem('bop_favorites')) favorites = JSON.parse(localStorage.getItem('bop_favorites')); } catch(e) { favorites = {}; }
+        if (favorites['undefined']) { delete favorites['undefined']; try { localStorage.setItem('bop_favorites', JSON.stringify(favorites)); } catch(e) {} }
         try {
-            if (localStorage.getItem('bop_panels')) savedPanels = JSON.parse(localStorage.getItem('bop_panels'));
-            if (localStorage.getItem('bop_favorites')) favorites = JSON.parse(localStorage.getItem('bop_favorites'));
             if (localStorage.getItem('bop_speed')) {
                 currentSpeed = parseFloat(localStorage.getItem('bop_speed'));
                 for (var si = 0; si < speedOptions.length; si++) {
                     if (speedOptions[si] === currentSpeed) { speedIndex = si; break; }
                 }
             }
-            if (localStorage.getItem('bop_pin')) appPin = localStorage.getItem('bop_pin');
-            if (localStorage.getItem('bop_dash_config')) dashConfig = JSON.parse(localStorage.getItem('bop_dash_config'));
-        } catch(e) { savedPanels = {}; favorites = {}; }
+        } catch(e) {}
+        try { if (localStorage.getItem('bop_pin')) appPin = localStorage.getItem('bop_pin'); } catch(e) {}
+        try { if (localStorage.getItem('bop_dash_config')) dashConfig = JSON.parse(localStorage.getItem('bop_dash_config')); } catch(e) {}
 
         /* ===== LOGIN ===== */
         var loginIndex = 0;
@@ -892,10 +894,11 @@
             document.getElementById('view-channels').style.display = 'flex';
             document.getElementById('catsColumn').style.display = 'flex';
             document.getElementById('view-player').classList.remove('active');
+            document.getElementById('vodGrid').style.display = 'none';
             updateColumnFocus();
             var label = { LIVE: 'Canlı TV', VOD: 'Filmler', SERIES: 'Diziler' }[mode] || mode;
             var _sn = document.getElementById('channelsList');
-            _sn.innerHTML = '<div style="text-align:center; padding:40px; color:#888; font-size:18px;">📡 Kategoriler yükleniyor...</div>';
+            _sn.innerHTML = '<div style="padding:64px 24px 24px 130px;text-align:center; color:#888; font-size:18px;">📡 Kategoriler yükleniyor...</div>';
             /* Show search bar for all modes */
             document.getElementById('searchBar').style.display = 'block';
             document.getElementById('searchInput').value = '';
@@ -1078,7 +1081,7 @@
 
         /* ===== FAVORITES ===== */
         function toggleFav(ch) {
-            var id = ch.stream_id || ch.id;
+            var id = ch.series_id || ch.stream_id || ch.id;
             if (!id) return;
             if (favorites[id]) { delete favorites[id]; showNotif('⭐ Favorilerden çıkarıldı'); }
             else { favorites[id] = true; showNotif('⭐ Favorilere eklendi'); }
@@ -1097,15 +1100,35 @@
             document.getElementById('view-player').classList.remove('active');
             document.getElementById('searchBar').style.display = 'none';
             document.getElementById('searchInput').value = '';
+            document.getElementById('vodGrid').style.display = 'none';
             var favIds = Object.keys(favorites);
-            if (favIds.length === 0) { document.getElementById('channelsList').innerHTML = '<div style="text-align:center;padding:40px;color:#888;font-size:18px;">⭐ Henüz favori eklenmemiş</div>'; return; }
-            document.getElementById('channelsList').innerHTML = '<div style="text-align:center;padding:40px;color:#888;font-size:18px;">📡 Favoriler yükleniyor...</div>';
+            if (favIds.length === 0) { document.getElementById('channelsList').innerHTML = '<div style="padding:64px 24px 24px 130px;text-align:center;color:#888;font-size:18px;">⭐ Henüz favori eklenmemiş</div>'; syncMenu('fav'); return; }
+            document.getElementById('channelsList').innerHTML = '<div style="padding:64px 24px 24px 130px;text-align:center;color:#888;font-size:18px;">📡 Favoriler yükleniyor...</div>';
             var apiBase = activePanel.url + '/player_api.php?username=' + activePanel.user + '&password=' + activePanel.pass;
-            /* Try live first, then VOD, then Series */
             var modes = ['LIVE', 'VOD', 'SERIES'];
             var allFavs = [];
             var doneCount = 0;
+            var hasMore = false;
+            function tryRender() {
+                if (allFavs.length > 0) {
+                    masterStreamsData = allFavs;
+                    filteredStreams = masterStreamsData.slice(0);
+                    currentMode = allFavs[0].container_extension ? (allFavs[0].series_id ? 'SERIES' : 'VOD') : 'LIVE';
+                    renderContent();
+                } else if (!hasMore) {
+                    document.getElementById('channelsList').innerHTML = '<div style="padding:64px 24px 24px 130px;text-align:center;color:#888;font-size:18px;">⭐ Favori kanal bulunamadı</div>';
+                }
+            }
             modes.forEach(function(mode) {
+                if (fullStreamsCache[mode]) {
+                    doneCount++;
+                    var matched = fullStreamsCache[mode].filter(function(s) { return favorites[s.series_id || s.stream_id || s.id]; });
+                    allFavs = allFavs.concat(matched);
+                    tryRender();
+                    if (doneCount === modes.length) { syncMenu('fav'); }
+                    return;
+                }
+                hasMore = true;
                 var ep = mode === 'LIVE' ? 'get_live_streams' : mode === 'VOD' ? 'get_vod_streams' : 'get_series';
                 var xhr = new XMLHttpRequest();
                 xhr.open('GET', apiBase + '&action=' + ep, true);
@@ -1116,23 +1139,16 @@
                         try {
                             var res = JSON.parse(xhr.responseText);
                             if (res && res.length > 0) {
-                                allFavs = allFavs.concat(res.filter(function(s) { return favorites[s.stream_id || s.id]; }));
+                                fullStreamsCache[mode] = res;
+                                var matched = res.filter(function(s) { return favorites[s.series_id || s.stream_id || s.id]; });
+                                allFavs = allFavs.concat(matched);
                             }
                         } catch(e) {}
                     }
-                    if (doneCount === modes.length) {
-                        if (allFavs.length > 0) {
-                            masterStreamsData = allFavs;
-                            filteredStreams = masterStreamsData.slice(0);
-                            currentMode = allFavs[0].container_extension ? (allFavs[0].series_id ? 'SERIES' : 'VOD') : 'LIVE';
-                            renderContent();
-                        } else {
-                            document.getElementById('channelsList').innerHTML = '<div style="text-align:center;padding:40px;color:#888;font-size:18px;">⭐ Favori kanal bulunamadı</div>';
-                        }
-                        syncMenu('fav');
-                    }
+                    tryRender();
+                    if (doneCount === modes.length) { syncMenu('fav'); if (!allFavs.length) document.getElementById('channelsList').innerHTML = '<div style="padding:64px 24px 24px 130px;text-align:center;color:#888;font-size:18px;">⭐ Favori kanal bulunamadı</div>'; }
                 };
-                xhr.onerror = function() { doneCount++; if (doneCount === modes.length) { document.getElementById('channelsList').innerHTML = '<div style="text-align:center;padding:40px;color:#888;font-size:18px;">⭐ Favori kanal bulunamadı</div>'; } };
+                xhr.onerror = function() { doneCount++; if (doneCount === modes.length) { syncMenu('fav'); document.getElementById('channelsList').innerHTML = '<div style="padding:64px 24px 24px 130px;text-align:center;color:#888;font-size:18px;">⭐ Favori kanal bulunamadı</div>'; } };
                 xhr.send();
             });
         }
@@ -1150,7 +1166,7 @@
             var displayList = makeVirtual(list);
             var frag = document.createDocumentFragment();
             displayList.forEach(function(ch, idx) {
-                var isFav = favorites[ch.stream_id || ch.id] ? true : false;
+                var isFav = favorites[ch.series_id || ch.stream_id || ch.id] ? true : false;
                 var row = document.createElement('div');
                 row.className = 'citem' + (idx === channelsIndex ? ' focused' : '');
                 var logo = ch.stream_icon || ch.logo || ch.cover || ch.tv_icon || '';
@@ -1178,7 +1194,7 @@
                 row.appendChild(nameSpan);
                 var favSpan = document.createElement('span');
                 favSpan.className = 'cfav';
-                favSpan.id = 'fav-' + (ch.stream_id || ch.id);
+                favSpan.id = 'fav-' + (ch.series_id || ch.stream_id || ch.id);
                 favSpan.textContent = isFav ? '★' : '☆';
                 favSpan.onclick = function(e) { e.stopPropagation(); toggleFav(ch); };
                 row.appendChild(favSpan);
@@ -1193,6 +1209,7 @@
             var box = document.getElementById('vodGrid');
             box.style.display = 'flex'; box.className = 'vod-grid';
             box.style.paddingTop = '64px';
+            box.style.paddingLeft = '130px';
             document.getElementById('channelsList').style.display = 'none';
             box.innerHTML = '';
             box.onscroll = null;
@@ -1201,12 +1218,13 @@
             var displayList = makeVirtual(list);
             var frag = document.createDocumentFragment();
             displayList.forEach(function(ch, idx) {
-                var isFav = favorites[ch.stream_id || ch.id] ? true : false;
+                var isFav = favorites[ch.series_id || ch.stream_id || ch.id] ? true : false;
                 var card = document.createElement('div');
                 card.className = 'vod-card' + (idx === channelsIndex ? ' focused' : '');
                 var poster = ch.stream_icon || ch.cover || '';
+                var gid = ch.series_id || ch.stream_id || ch.id;
                 card.innerHTML = '<div class="vposter"><img src="' + (poster || noPoster) + '" onerror="this.src=\'' + noPoster + '\'"></div><div class="vtitle">' + ch.name + '</div>' +
-                    '<div style="position:absolute;top:8px;right:12px;font-size:28px;color:#eab308;cursor:pointer;z-index:2;" id="gfav-' + (ch.stream_id || ch.id) + '">' + (isFav ? '★' : '☆') + '</div>';
+                    '<div style="position:absolute;top:8px;right:12px;font-size:28px;color:#eab308;cursor:pointer;z-index:2;" id="gfav-' + gid + '">' + (isFav ? '★' : '☆') + '</div>';
                 var favEl = card.querySelector('[id^="gfav-"]');
                 if (favEl) favEl.onclick = function(e) { e.stopPropagation(); toggleFav(ch); };
                 card.onclick = function() {
@@ -1301,10 +1319,17 @@
             box.appendChild(header);
             filteredEpisodes = eps;
             filteredStreams = eps;
+            var sId = currentSeriesInfo.series_id || currentSeriesInfo.id;
             eps.forEach(function(ep, idx) {
+                var isFav = favorites[sId] ? true : false;
                 var row = document.createElement('div');
                 row.className = 'citem' + (idx === channelsIndex ? ' focused' : '');
                 row.innerHTML = '<span class="cnum">B' + (ep.episode_num || (idx+1)) + '</span><span class="cname">' + (ep.title || ep.name) + '</span>';
+                var eFav = document.createElement('span');
+                eFav.className = 'cfav';
+                eFav.textContent = isFav ? '★' : '☆';
+                eFav.onclick = function(ev) { ev.stopPropagation(); toggleFav({series_id:sId, name:currentSeriesInfo.info?currentSeriesInfo.info.name:'Dizi'}); };
+                row.appendChild(eFav);
                 row.onclick = function() { channelsIndex = idx; playEpisode(ep); };
                 box.appendChild(row);
             });
@@ -1326,11 +1351,18 @@
                     header.style.cssText = 'padding:16px 20px;font-size:20px;font-weight:700;color:#ff9800;border-bottom:1px solid rgba(255,255,255,0.05);margin-top:8px;';
                     header.textContent = 'Sezon ' + s;
                     box.appendChild(header);
+                    var sId = currentSeriesInfo.series_id || currentSeriesInfo.id;
                     eps.forEach(function(ep) {
                         allEps.push(ep);
+                        var isFav = favorites[sId] ? true : false;
                         var row = document.createElement('div');
                         row.className = 'citem' + ((allEps.length - 1) === channelsIndex ? ' focused' : '');
                         row.innerHTML = '<span class="cnum">B' + (ep.episode_num || '') + '</span><span class="cname">' + (ep.title || ep.name) + '</span>';
+                        var eFav2 = document.createElement('span');
+                        eFav2.className = 'cfav';
+                        eFav2.textContent = isFav ? '★' : '☆';
+                        eFav2.onclick = function(ev) { ev.stopPropagation(); toggleFav({series_id:sId, name:currentSeriesInfo.info?currentSeriesInfo.info.name:'Dizi'}); };
+                        row.appendChild(eFav2);
                         row.onclick = (function(e, i) { return function() { channelsIndex = i; playEpisode(e); }; })(ep, allEps.length - 1);
                         box.appendChild(row);
                     });
@@ -1686,7 +1718,7 @@
                 { key: 'movies', label: '🎬 Filmler' },
                 { key: 'series', label: '📺 Diziler' },
                 { key: 'epg', label: '📋 EPG Rehberi' },
-                { key: 'catchup', label: '⏪ Catch Up' },
+                { key: 'catchup', label: '⏪ Gerideki İçerik' },
                 { key: 'settings', label: '⚙️ Ayarlar' },
                 { key: 'recent', label: '🆕 Son Eklenenler' }
             ];
