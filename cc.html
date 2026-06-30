@@ -1109,11 +1109,13 @@
             var allFavs = [];
             var doneCount = 0;
             var hasMore = false;
+            var hasSeries = false;
             function tryRender() {
                 if (allFavs.length > 0) {
-                    masterStreamsData = allFavs;
-                    filteredStreams = masterStreamsData.slice(0);
-                    currentMode = allFavs[0].container_extension ? (allFavs[0].series_id ? 'SERIES' : 'VOD') : 'LIVE';
+                    if (hasSeries) currentMode = 'SERIES';
+                    else currentMode = allFavs[0].container_extension ? 'VOD' : 'LIVE';
+                    masterStreamsData = allFavs.slice(0);
+                    filteredStreams = masterStreamsData.filter(function(s) { return currentMode === 'SERIES' ? s.series_id : currentMode === 'VOD' ? s.container_extension : !s.series_id; });
                     renderContent();
                 } else if (!hasMore) {
                     document.getElementById('channelsList').innerHTML = '<div style="padding:64px 24px 24px 130px;text-align:center;color:#888;font-size:18px;">⭐ Favori kanal bulunamadı</div>';
@@ -1123,7 +1125,9 @@
                 if (fullStreamsCache[mode]) {
                     doneCount++;
                     var matched = fullStreamsCache[mode].filter(function(s) { return favorites[s.series_id || s.stream_id || s.id]; });
+                    matched.forEach(function(m) { if (mode === 'SERIES') m._favType = 'series'; });
                     allFavs = allFavs.concat(matched);
+                    if (mode === 'SERIES' && matched.length > 0) hasSeries = true;
                     tryRender();
                     if (doneCount === modes.length) { syncMenu('fav'); }
                     return;
@@ -1141,7 +1145,9 @@
                             if (res && res.length > 0) {
                                 fullStreamsCache[mode] = res;
                                 var matched = res.filter(function(s) { return favorites[s.series_id || s.stream_id || s.id]; });
+                                matched.forEach(function(m) { if (mode === 'SERIES') m._favType = 'series'; });
                                 allFavs = allFavs.concat(matched);
+                                if (mode === 'SERIES' && matched.length > 0) hasSeries = true;
                             }
                         } catch(e) {}
                     }
@@ -1198,7 +1204,7 @@
                 favSpan.textContent = isFav ? '★' : '☆';
                 favSpan.onclick = function(e) { e.stopPropagation(); toggleFav(ch); };
                 row.appendChild(favSpan);
-                row.onclick = function() { channelsIndex = idx; playMedia(ch); };
+                row.onclick = function() { channelsIndex = idx; if (ch.series_id || ch._favType === 'series') loadSeriesTree(ch); else playMedia(ch); };
                 frag.appendChild(row);
             });
             box.appendChild(frag);
@@ -1229,7 +1235,8 @@
                 if (favEl) favEl.onclick = function(e) { e.stopPropagation(); toggleFav(ch); };
                 card.onclick = function() {
                     channelsIndex = idx;
-                    if (currentMode === 'LIVE') playMedia(ch);
+                    if (ch.series_id || ch._favType === 'series') loadSeriesTree(ch);
+                    else if (currentMode === 'LIVE') playMedia(ch);
                     else showInfoModal(ch);
                 };
                 frag.appendChild(card);
@@ -1389,6 +1396,7 @@
                 var ext = ch.container_extension || 'mp4';
                 streamUrl = activePanel.url + '/movie/' + activePanel.user + '/' + activePanel.pass + '/' + ch.stream_id + '.' + ext;
             }
+            if (!streamUrl) { showNotif('⚠️ Oynatılamaz içerik'); return; }
             currentPlaying = ch;
             lastChannel = currentPlaying;
             document.getElementById('osdTitle').textContent = (currentMode === 'LIVE' ? '📺 ' : '🎬 ') + ch.name;
@@ -1503,7 +1511,6 @@
 
         player.addEventListener('error', function() {
             if (currentPlaying && currentMode === 'LIVE') triggerReconnect();
-            else if (currentPlaying) showNotif('⚠️ Oynatma hatası');
         });
         player.addEventListener('stalled', function() {
             if (currentPlaying && currentMode === 'LIVE') triggerReconnect();
